@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="tf-wing" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#555"/>
+      <stop offset="50%" style="stop-color:#777"/>
+      <stop offset="100%" style="stop-color:#555"/>
+    </linearGradient>
+    <filter id="tf-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#88aaff" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Left solar panel/wing -->
+  <rect x="30" y="8" width="8" height="104" rx="2" fill="url(#tf-wing)" stroke="#444" stroke-width="1"/>
+  <!-- Wing struts -->
+  <line x1="31" y1="15" x2="37" y2="15" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="25" x2="37" y2="25" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="35" x2="37" y2="35" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="45" x2="37" y2="45" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="55" x2="37" y2="55" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="65" x2="37" y2="65" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="75" x2="37" y2="75" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="85" x2="37" y2="85" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="95" x2="37" y2="95" stroke="#666" stroke-width="0.5"/>
+  <line x1="31" y1="105" x2="37" y2="105" stroke="#666" stroke-width="0.5"/>
+  <!-- Right solar panel/wing -->
+  <rect x="162" y="8" width="8" height="104" rx="2" fill="url(#tf-wing)" stroke="#444" stroke-width="1"/>
+  <!-- Wing struts -->
+  <line x1="163" y1="15" x2="169" y2="15" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="25" x2="169" y2="25" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="35" x2="169" y2="35" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="45" x2="169" y2="45" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="55" x2="169" y2="55" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="65" x2="169" y2="65" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="75" x2="169" y2="75" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="85" x2="169" y2="85" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="95" x2="169" y2="95" stroke="#666" stroke-width="0.5"/>
+  <line x1="163" y1="105" x2="169" y2="105" stroke="#666" stroke-width="0.5"/>
+  <!-- Connecting pylons -->
+  <polygon points="38,55 75,55 75,50 38,45" fill="#888"/>
+  <polygon points="38,65 75,65 75,70 38,75" fill="#888"/>
+  <polygon points="162,55 125,55 125,50 162,45" fill="#888"/>
+  <polygon points="162,65 125,65 125,70 162,75" fill="#888"/>
+  <!-- Central cockpit ball -->
+  <circle cx="100" cy="60" r="25" fill="#666" stroke="#555" stroke-width="1.5" filter="url(#tf-glow)"/>
+  <circle cx="100" cy="60" r="20" fill="#777"/>
+  <!-- Cockpit window -->
+  <polygon points="90,50 100,45 110,50 110,65 100,70 90,65" fill="#224466" opacity="0.8"/>
+  <polygon points="93,52 100,48 107,52 107,63 100,67 93,63" fill="#336699" opacity="0.6"/>
+  <!-- Window frame -->
+  <line x1="100" y1="45" x2="100" y2="70" stroke="#444" stroke-width="0.8"/>
+  <line x1="90" y1="57" x2="110" y2="57" stroke="#444" stroke-width="0.8"/>
+  <!-- Laser cannon tips -->
+  <circle cx="34" cy="8" r="2" fill="#44ff44" opacity="0.5"/>
+  <circle cx="34" cy="112" r="2" fill="#44ff44" opacity="0.5"/>
+  <circle cx="166" cy="8" r="2" fill="#44ff44" opacity="0.5"/>
+  <circle cx="166" cy="112" r="2" fill="#44ff44" opacity="0.5"/>
+</svg>

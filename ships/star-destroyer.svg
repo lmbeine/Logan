@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="sd-hull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#777"/>
+      <stop offset="50%" style="stop-color:#999"/>
+      <stop offset="100%" style="stop-color:#666"/>
+    </linearGradient>
+    <filter id="sd-glow">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#4488ff" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Main wedge hull -->
+  <polygon points="15,60 170,40 185,52 185,68 170,80" fill="url(#sd-hull)" filter="url(#sd-glow)"/>
+  <!-- Upper surface -->
+  <polygon points="20,59 170,41 180,52 170,56 55,58" fill="#888"/>
+  <!-- Lower surface -->
+  <polygon points="20,61 170,79 180,68 170,64 55,62" fill="#777"/>
+  <!-- Bridge tower -->
+  <rect x="140" y="44" width="15" height="7" rx="1" fill="#aaa"/>
+  <rect x="143" y="39" width="9" height="7" rx="1" fill="#bbb"/>
+  <polygon points="144,39 150,34 152,39" fill="#ccc"/>
+  <!-- Shield generators -->
+  <circle cx="146" cy="37" r="2.5" fill="#ddd"/>
+  <circle cx="151" cy="37" r="2.5" fill="#ddd"/>
+  <!-- Surface trenches -->
+  <line x1="25" y1="59" x2="165" y2="44" stroke="#666" stroke-width="0.8"/>
+  <line x1="25" y1="61" x2="165" y2="76" stroke="#666" stroke-width="0.8"/>
+  <!-- Engine bank -->
+  <rect x="170" y="48" width="10" height="5" fill="#666"/>
+  <rect x="170" y="55" width="10" height="5" fill="#666"/>
+  <rect x="170" y="62" width="10" height="5" fill="#666"/>
+  <!-- Engine glow -->
+  <ellipse cx="183" cy="51" rx="4" ry="3" fill="#4488ff" opacity="0.7"/>
+  <ellipse cx="183" cy="58" rx="4" ry="3" fill="#4488ff" opacity="0.7"/>
+  <ellipse cx="183" cy="65" rx="4" ry="3" fill="#4488ff" opacity="0.7"/>
+  <!-- Hull panel details -->
+  <rect x="50" y="56" width="12" height="3" rx="1" fill="#888" opacity="0.5"/>
+  <rect x="80" y="53" width="15" height="4" rx="1" fill="#888" opacity="0.5"/>
+  <rect x="110" y="50" width="14" height="4" rx="1" fill="#888" opacity="0.5"/>
+  <!-- Weapon batteries -->
+  <circle cx="45" cy="58" r="1.5" fill="#44ff44" opacity="0.4"/>
+  <circle cx="70" cy="55" r="1.5" fill="#44ff44" opacity="0.4"/>
+  <circle cx="95" cy="52" r="1.5" fill="#44ff44" opacity="0.4"/>
+</svg>

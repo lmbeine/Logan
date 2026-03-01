@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="xw-hull" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ccc"/>
+      <stop offset="50%" style="stop-color:#eee"/>
+      <stop offset="100%" style="stop-color:#aaa"/>
+    </linearGradient>
+    <filter id="xw-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#ff4444" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <!-- S-foils (X-wing configuration) -->
+  <!-- Upper left wing -->
+  <polygon points="60,50 45,15 140,10 140,20 70,30" fill="#bbb" stroke="#999" stroke-width="0.5"/>
+  <!-- Lower left wing -->
+  <polygon points="60,70 45,105 140,110 140,100 70,90" fill="#bbb" stroke="#999" stroke-width="0.5"/>
+  <!-- Upper right wing -->
+  <polygon points="60,50 45,25 140,20 140,35 70,40" fill="#ccc" stroke="#999" stroke-width="0.5"/>
+  <!-- Lower right wing -->
+  <polygon points="60,70 45,95 140,100 140,85 70,80" fill="#ccc" stroke="#999" stroke-width="0.5"/>
+  <!-- Main fuselage -->
+  <polygon points="20,55 20,65 60,70 145,68 155,63 155,57 145,52 60,50" fill="url(#xw-hull)" filter="url(#xw-glow)"/>
+  <!-- Nose cone -->
+  <polygon points="5,58 5,62 20,65 20,55" fill="#ddd"/>
+  <!-- Cockpit -->
+  <ellipse cx="55" cy="56" rx="10" ry="6" fill="#225588" opacity="0.8"/>
+  <ellipse cx="55" cy="56" rx="8" ry="4" fill="#3388cc" opacity="0.6"/>
+  <!-- Engine -->
+  <rect x="145" y="54" width="15" height="12" rx="2" fill="#999"/>
+  <ellipse cx="162" cy="60" rx="5" ry="6" fill="#ff4444" opacity="0.7"/>
+  <ellipse cx="162" cy="60" rx="3" ry="4" fill="#ffaa66" opacity="0.8"/>
+  <!-- Laser cannons on wing tips -->
+  <circle cx="140" cy="12" r="3" fill="#ff4444" opacity="0.6"/>
+  <circle cx="140" cy="108" r="3" fill="#ff4444" opacity="0.6"/>
+  <circle cx="140" cy="22" r="3" fill="#ff4444" opacity="0.6"/>
+  <circle cx="140" cy="98" r="3" fill="#ff4444" opacity="0.6"/>
+  <!-- Wing stripes -->
+  <line x1="80" y1="22" x2="135" y2="15" stroke="#cc4444" stroke-width="2"/>
+  <line x1="80" y1="98" x2="135" y2="105" stroke="#cc4444" stroke-width="2"/>
+  <line x1="80" y1="32" x2="135" y2="28" stroke="#cc4444" stroke-width="2"/>
+  <line x1="80" y1="88" x2="135" y2="92" stroke="#cc4444" stroke-width="2"/>
+  <!-- R2 unit -->
+  <circle cx="75" cy="55" r="4" fill="#2255aa"/>
+  <circle cx="75" cy="54" r="2" fill="#4488dd"/>
+</svg>

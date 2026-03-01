@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="nb-hull" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#999"/>
+      <stop offset="50%" style="stop-color:#ccc"/>
+      <stop offset="100%" style="stop-color:#888"/>
+    </linearGradient>
+    <filter id="nb-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#ff6644" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <!-- Forward hull section -->
+  <polygon points="20,45 70,35 70,75 20,65" fill="url(#nb-hull)" filter="url(#nb-glow)"/>
+  <rect x="20" y="48" width="50" height="14" rx="2" fill="#bbb"/>
+  <!-- Connecting spar (thin middle section - distinctive Nebulon-B feature) -->
+  <rect x="70" y="53" width="60" height="4" fill="#aaa"/>
+  <rect x="70" y="58" width="60" height="3" fill="#999"/>
+  <!-- Aft engine section -->
+  <polygon points="130,40 175,30 175,85 130,75" fill="url(#nb-hull)"/>
+  <rect x="130" y="43" width="45" height="28" rx="3" fill="#bbb"/>
+  <!-- Engine exhausts -->
+  <rect x="175" y="38" width="8" height="10" rx="1" fill="#666"/>
+  <ellipse cx="185" cy="43" rx="5" ry="5" fill="#ff6644" opacity="0.8"/>
+  <rect x="175" y="52" width="8" height="10" rx="1" fill="#666"/>
+  <ellipse cx="185" cy="57" rx="5" ry="5" fill="#ff6644" opacity="0.8"/>
+  <rect x="175" y="66" width="8" height="10" rx="1" fill="#666"/>
+  <ellipse cx="185" cy="71" rx="5" ry="5" fill="#ff6644" opacity="0.8"/>
+  <!-- Bridge section -->
+  <rect x="28" y="42" width="15" height="8" rx="2" fill="#ddd"/>
+  <rect x="30" y="39" width="10" height="5" rx="1" fill="#eee"/>
+  <!-- Hull details -->
+  <line x1="25" y1="50" x2="65" y2="50" stroke="#999" stroke-width="0.5"/>
+  <line x1="25" y1="60" x2="65" y2="60" stroke="#999" stroke-width="0.5"/>
+  <line x1="135" y1="50" x2="170" y2="50" stroke="#999" stroke-width="0.5"/>
+  <line x1="135" y1="65" x2="170" y2="65" stroke="#999" stroke-width="0.5"/>
+  <!-- Windows -->
+  <circle cx="35" cy="46" r="1.5" fill="#88ccff" opacity="0.8"/>
+  <circle cx="42" cy="46" r="1.5" fill="#88ccff" opacity="0.8"/>
+  <circle cx="49" cy="46" r="1.5" fill="#88ccff" opacity="0.8"/>
+</svg>
