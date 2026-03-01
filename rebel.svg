@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <filter id="rebel-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#ff4444" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+  <!-- Rebel Alliance Starbird / Phoenix insignia -->
+  <g transform="translate(50,50)" filter="url(#rebel-glow)">
+    <!-- Main phoenix body -->
+    <path d="M0,-42 C-3,-35 -5,-25 -4,-15 C-3,-5 -1,5 0,15 C1,5 3,-5 4,-15 C5,-25 3,-35 0,-42 Z" fill="#ff4444"/>
+    <!-- Left wing -->
+    <path d="M-4,-15 C-8,-18 -18,-28 -30,-32 C-35,-33 -40,-30 -42,-25 C-40,-20 -35,-15 -28,-12 C-20,-8 -12,-8 -4,-10 Z" fill="#ff4444"/>
+    <!-- Right wing -->
+    <path d="M4,-15 C8,-18 18,-28 30,-32 C35,-33 40,-30 42,-25 C40,-20 35,-15 28,-12 C20,-8 12,-8 4,-10 Z" fill="#ff4444"/>
+    <!-- Left lower wing extension -->
+    <path d="M-4,-5 C-10,-2 -22,2 -35,8 C-38,10 -38,15 -35,18 C-30,16 -22,12 -15,8 C-8,4 -4,0 -3,0 Z" fill="#ff4444"/>
+    <!-- Right lower wing extension -->
+    <path d="M4,-5 C10,-2 22,2 35,8 C38,10 38,15 35,18 C30,16 22,12 15,8 C8,4 4,0 3,0 Z" fill="#ff4444"/>
+    <!-- Tail feathers -->
+    <path d="M0,15 C-2,20 -5,30 -8,40 C-4,38 -1,32 0,25 C1,32 4,38 8,40 C5,30 2,20 0,15 Z" fill="#ff4444"/>
+    <!-- Head crest -->
+    <path d="M0,-42 C-2,-44 -5,-43 -6,-40 C-4,-38 -2,-40 0,-42 Z" fill="#ff6666"/>
+    <path d="M0,-42 C2,-44 5,-43 6,-40 C4,-38 2,-40 0,-42 Z" fill="#ff6666"/>
+    <!-- Eye -->
+    <circle cx="0" cy="-30" r="2" fill="#ffaaaa"/>
+  </g>
+</svg>

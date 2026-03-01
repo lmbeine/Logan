@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="cr-hull" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ddd"/>
+      <stop offset="50%" style="stop-color:#fff"/>
+      <stop offset="100%" style="stop-color:#bbb"/>
+    </linearGradient>
+    <filter id="cr-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#ff4444" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Main hull - sleek corvette shape -->
+  <polygon points="15,55 15,65 160,75 175,68 175,52 160,45" fill="url(#cr-hull)" filter="url(#cr-glow)"/>
+  <!-- Hammerhead bridge -->
+  <polygon points="10,48 10,72 30,68 30,52" fill="#eee"/>
+  <rect x="10" y="50" width="18" height="6" rx="2" fill="#fff"/>
+  <!-- Engine block -->
+  <polygon points="160,42 185,35 195,45 195,75 185,85 160,78" fill="#ccc"/>
+  <!-- Engine exhausts -->
+  <ellipse cx="195" cy="50" rx="5" ry="6" fill="#ff4444" opacity="0.7"/>
+  <ellipse cx="195" cy="65" rx="5" ry="6" fill="#ff4444" opacity="0.7"/>
+  <ellipse cx="195" cy="50" rx="3" ry="4" fill="#ffaa66" opacity="0.9"/>
+  <ellipse cx="195" cy="65" rx="3" ry="4" fill="#ffaa66" opacity="0.9"/>
+  <!-- Hull panels -->
+  <line x1="30" y1="53" x2="155" y2="47" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="30" y1="67" x2="155" y2="73" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="60" y1="52" x2="60" y2="68" stroke="#bbb" stroke-width="0.5"/>
+  <line x1="100" y1="50" x2="100" y2="70" stroke="#bbb" stroke-width="0.5"/>
+  <line x1="135" y1="48" x2="135" y2="72" stroke="#bbb" stroke-width="0.5"/>
+  <!-- Turret -->
+  <circle cx="80" cy="50" r="4" fill="#ddd" stroke="#999" stroke-width="0.5"/>
+  <line x1="80" y1="50" x2="80" y2="42" stroke="#999" stroke-width="1.5"/>
+  <!-- Windows -->
+  <circle cx="15" cy="55" r="1.5" fill="#88ccff" opacity="0.8"/>
+  <circle cx="15" cy="60" r="1.5" fill="#88ccff" opacity="0.8"/>
+  <circle cx="20" cy="53" r="1" fill="#88ccff" opacity="0.6"/>
+</svg>

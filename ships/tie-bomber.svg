@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="tb-wing" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#555"/>
+      <stop offset="50%" style="stop-color:#777"/>
+      <stop offset="100%" style="stop-color:#555"/>
+    </linearGradient>
+    <filter id="tb-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#88aaff" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Left solar panel/wing -->
+  <rect x="20" y="8" width="8" height="104" rx="2" fill="url(#tb-wing)" stroke="#444" stroke-width="1"/>
+  <!-- Wing struts -->
+  <line x1="21" y1="20" x2="27" y2="20" stroke="#666" stroke-width="0.5"/>
+  <line x1="21" y1="35" x2="27" y2="35" stroke="#666" stroke-width="0.5"/>
+  <line x1="21" y1="50" x2="27" y2="50" stroke="#666" stroke-width="0.5"/>
+  <line x1="21" y1="65" x2="27" y2="65" stroke="#666" stroke-width="0.5"/>
+  <line x1="21" y1="80" x2="27" y2="80" stroke="#666" stroke-width="0.5"/>
+  <line x1="21" y1="95" x2="27" y2="95" stroke="#666" stroke-width="0.5"/>
+  <!-- Connecting pylons to cockpit -->
+  <polygon points="28,52 60,52 60,48 28,42" fill="#888"/>
+  <polygon points="28,68 60,68 60,72 28,78" fill="#888"/>
+  <!-- Central cockpit ball (standard TIE cockpit) -->
+  <circle cx="80" cy="60" r="22" fill="#666" stroke="#555" stroke-width="1.5" filter="url(#tb-glow)"/>
+  <circle cx="80" cy="60" r="17" fill="#777"/>
+  <!-- Cockpit window -->
+  <polygon points="72,51 80,47 88,51 88,64 80,68 72,64" fill="#224466" opacity="0.8"/>
+  <polygon points="74,53 80,50 86,53 86,62 80,65 74,62" fill="#336699" opacity="0.6"/>
+  <!-- Window frame -->
+  <line x1="80" y1="47" x2="80" y2="68" stroke="#444" stroke-width="0.8"/>
+  <line x1="72" y1="57" x2="88" y2="57" stroke="#444" stroke-width="0.8"/>
+  <!-- Connecting pylon to bomb pod -->
+  <rect x="102" y="55" width="20" height="10" rx="2" fill="#888"/>
+  <!-- Ordnance pod (elongated, distinctive bomber feature) -->
+  <ellipse cx="145" cy="60" rx="30" ry="25" fill="#666" stroke="#555" stroke-width="1.5"/>
+  <ellipse cx="145" cy="60" rx="25" ry="20" fill="#777"/>
+  <!-- Bomb bay doors -->
+  <line x1="125" y1="60" x2="165" y2="60" stroke="#555" stroke-width="1"/>
+  <line x1="145" y1="40" x2="145" y2="80" stroke="#555" stroke-width="0.8"/>
+  <!-- Bomb indicators -->
+  <circle cx="135" cy="50" r="3" fill="#ff4444" opacity="0.4"/>
+  <circle cx="145" cy="48" r="3" fill="#ff4444" opacity="0.4"/>
+  <circle cx="155" cy="50" r="3" fill="#ff4444" opacity="0.4"/>
+  <circle cx="135" cy="70" r="3" fill="#ff4444" opacity="0.4"/>
+  <circle cx="145" cy="72" r="3" fill="#ff4444" opacity="0.4"/>
+  <circle cx="155" cy="70" r="3" fill="#ff4444" opacity="0.4"/>
+  <!-- Pod surface detail -->
+  <ellipse cx="145" cy="60" rx="20" ry="15" fill="none" stroke="#666" stroke-width="0.5"/>
+</svg>

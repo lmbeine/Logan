@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="vd-hull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#888"/>
+      <stop offset="50%" style="stop-color:#aaa"/>
+      <stop offset="100%" style="stop-color:#777"/>
+    </linearGradient>
+    <filter id="vd-glow">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#4488ff" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Main wedge hull - stubbier than ISD -->
+  <polygon points="25,60 155,42 175,52 175,68 155,78" fill="url(#vd-hull)" filter="url(#vd-glow)"/>
+  <!-- Upper surface -->
+  <polygon points="30,59 155,43 168,52 155,56 60,58" fill="#999"/>
+  <!-- Lower surface -->
+  <polygon points="30,61 155,77 168,68 155,64 60,62" fill="#888"/>
+  <!-- Bridge tower (smaller than ISD) -->
+  <rect x="130" y="46" width="12" height="6" rx="1" fill="#bbb"/>
+  <rect x="132" y="42" width="8" height="6" rx="1" fill="#ccc"/>
+  <polygon points="133,42 139,38 140,42" fill="#ddd"/>
+  <!-- Surface trenches -->
+  <line x1="35" y1="59" x2="150" y2="45" stroke="#777" stroke-width="0.7"/>
+  <line x1="35" y1="61" x2="150" y2="75" stroke="#777" stroke-width="0.7"/>
+  <!-- Engine bank -->
+  <rect x="158" y="49" width="10" height="5" fill="#777"/>
+  <rect x="158" y="56" width="10" height="5" fill="#777"/>
+  <rect x="158" y="63" width="10" height="5" fill="#777"/>
+  <!-- Engine glow -->
+  <ellipse cx="171" cy="52" rx="4" ry="3" fill="#4488ff" opacity="0.6"/>
+  <ellipse cx="171" cy="59" rx="4" ry="3" fill="#4488ff" opacity="0.6"/>
+  <ellipse cx="171" cy="66" rx="4" ry="3" fill="#4488ff" opacity="0.6"/>
+  <!-- Hull panels -->
+  <rect x="55" y="56" width="10" height="3" rx="1" fill="#999" opacity="0.5"/>
+  <rect x="80" y="53" width="12" height="4" rx="1" fill="#999" opacity="0.5"/>
+  <rect x="105" y="50" width="10" height="4" rx="1" fill="#999" opacity="0.5"/>
+  <!-- Concussion missile launchers (Victory specialty) -->
+  <circle cx="40" cy="58" r="2" fill="#ffaa44" opacity="0.5"/>
+  <circle cx="50" cy="57" r="2" fill="#ffaa44" opacity="0.5"/>
+  <circle cx="60" cy="56" r="2" fill="#ffaa44" opacity="0.5"/>
+</svg>
