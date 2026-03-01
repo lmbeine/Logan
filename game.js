@@ -244,6 +244,7 @@ class BattleshipGame {
                 }
 
                 if (this.phase === 'setup') {
+                    cell.addEventListener('dragenter', (e) => e.preventDefault());
                     cell.addEventListener('dragover', (e) => this.handleDragOver(e, row, col));
                     cell.addEventListener('dragleave', (e) => this.handleDragLeave(e));
                     cell.addEventListener('drop', (e) => this.handleDrop(e, row, col));
