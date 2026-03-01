@@ -46,7 +46,8 @@ class BattleshipGame {
 
         this.dragOriginalShip = null;
         this.dragGhost = null;
-        this._dragMoveHandler = null;
+        this._customDragMouseMove = null;
+        this._customDragMouseUp = null;
 
         this.initializeDOM();
         this.setupEventListeners();
@@ -185,7 +186,6 @@ class BattleshipGame {
             shipVisual.className = 'ship-visual draggable-ship';
             shipVisual.dataset.shipIndex = index;
             shipVisual.dataset.size = ship.size;
-            shipVisual.setAttribute('draggable', 'true');
             
             for (let i = 0; i < ship.size; i++) {
                 const cell = document.createElement('div');
@@ -197,7 +197,8 @@ class BattleshipGame {
             shipItem.appendChild(shipSize);
             shipItem.appendChild(shipVisual);
 
-            shipVisual.addEventListener('dragstart', (e) => {
+            shipVisual.addEventListener('mousedown', (e) => {
+                e.preventDefault();
                 if (isPlaced) {
                     const shipData = this.player.ships.find(s => s.name === ship.name);
                     if (shipData) {
@@ -210,9 +211,8 @@ class BattleshipGame {
                     }
                     this.removeShipFromBoard(ship.name);
                 }
-                this.handleDragStart(e, index);
+                this.startCustomDrag(index, e.clientX, e.clientY);
             });
-            shipVisual.addEventListener('dragend', (e) => this.handleDragEnd(e));
 
             this.shipsListEl.appendChild(shipItem);
         });
@@ -261,16 +261,11 @@ class BattleshipGame {
                 }
 
                 if (this.phase === 'setup') {
-                    cell.addEventListener('dragenter', (e) => e.preventDefault());
-                    cell.addEventListener('dragover', (e) => this.handleDragOver(e, row, col));
-                    cell.addEventListener('dragleave', (e) => this.handleDragLeave(e));
-                    cell.addEventListener('drop', (e) => this.handleDrop(e, row, col));
-                    
                     if (cellData.ship !== null) {
-                        cell.setAttribute('draggable', 'true');
                         cell.classList.add('ship-draggable');
                         const shipName = cellData.ship;
-                        cell.addEventListener('dragstart', (e) => {
+                        cell.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
                             const shipIndex = REBEL_SHIPS.findIndex(s => s.name === shipName);
                             const shipData = this.player.ships.find(s => s.name === shipName);
                             if (shipData) {
@@ -292,13 +287,11 @@ class BattleshipGame {
                                     const cellEl = this.playerBoardEl.querySelector(`[data-row="${r}"][data-col="${c}"]`);
                                     if (cellEl) {
                                         cellEl.classList.remove('ship', 'ship-draggable');
-                                        cellEl.removeAttribute('draggable');
                                     }
                                 });
                             }
-                            this.handleDragStart(e, shipIndex);
+                            this.startCustomDrag(shipIndex, e.clientX, e.clientY);
                         });
-                        cell.addEventListener('dragend', (e) => this.handleDragEnd(e));
                     }
                 }
                 
@@ -360,19 +353,10 @@ class BattleshipGame {
         }
     }
 
-    handleDragStart(e, shipIndex) {
+    startCustomDrag(shipIndex, clientX, clientY) {
         this.draggedShipIndex = shipIndex;
         this.isDragging = true;
         const ship = REBEL_SHIPS[shipIndex];
-        
-        e.dataTransfer.setData('text/plain', shipIndex);
-        e.dataTransfer.effectAllowed = 'move';
-        
-        e.target.classList.add('dragging');
-        
-        const transparentImg = new Image();
-        transparentImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-        e.dataTransfer.setDragImage(transparentImg, 0, 0);
         
         this.dragGhost = document.createElement('div');
         this.dragGhost.className = 'drag-ghost-custom';
@@ -384,20 +368,85 @@ class BattleshipGame {
             cell.className = 'ship-cell';
             this.dragGhost.appendChild(cell);
         }
-        this.dragGhost.style.left = (e.clientX + 10) + 'px';
-        this.dragGhost.style.top = (e.clientY + 10) + 'px';
+        this.dragGhost.style.left = (clientX + 10) + 'px';
+        this.dragGhost.style.top = (clientY + 10) + 'px';
         document.body.appendChild(this.dragGhost);
         
-        this._dragMoveHandler = (ev) => {
+        this._customDragMouseMove = (ev) => {
+            ev.preventDefault();
             if (this.dragGhost) {
                 this.dragGhost.style.left = (ev.clientX + 10) + 'px';
                 this.dragGhost.style.top = (ev.clientY + 10) + 'px';
             }
+            
+            this.clearPreview();
+            const cellEl = this.getBoardCellFromPoint(ev.clientX, ev.clientY);
+            if (cellEl) {
+                const row = parseInt(cellEl.dataset.row);
+                const col = parseInt(cellEl.dataset.col);
+                this.lastDragRow = row;
+                this.lastDragCol = col;
+                
+                const cells = this.getShipCells(row, col, ship.size, this.isHorizontal);
+                const isValid = this.canPlaceShip(this.player.board, row, col, ship.size, this.isHorizontal);
+                
+                cells.forEach(([r, c]) => {
+                    if (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
+                        const el = this.playerBoardEl.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+                        if (el) {
+                            el.classList.add(isValid ? 'preview' : 'invalid');
+                        }
+                    }
+                });
+            } else {
+                this.lastDragRow = undefined;
+                this.lastDragCol = undefined;
+            }
         };
-        document.addEventListener('dragover', this._dragMoveHandler);
+        
+        this._customDragMouseUp = (ev) => {
+            const cellEl = this.getBoardCellFromPoint(ev.clientX, ev.clientY);
+            if (cellEl && this.draggedShipIndex !== null) {
+                const row = parseInt(cellEl.dataset.row);
+                const col = parseInt(cellEl.dataset.col);
+                const dropShip = REBEL_SHIPS[this.draggedShipIndex];
+                if (this.canPlaceShip(this.player.board, row, col, dropShip.size, this.isHorizontal)) {
+                    const cells = this.getShipCells(row, col, dropShip.size, this.isHorizontal);
+                    cells.forEach(([r, c]) => {
+                        this.player.board[r][c] = { ship: dropShip.name, hit: false };
+                    });
+                    this.player.ships.push({
+                        name: dropShip.name,
+                        size: dropShip.size,
+                        cells: cells,
+                        hits: 0
+                    });
+                    this.recordAction('place', 'player', { ship: dropShip.name, cells: cells });
+                    this.player.shipsPlaced++;
+                    this.dragOriginalShip = null;
+                    
+                    if (this.player.shipsPlaced === REBEL_SHIPS.length) {
+                        this.confirmPlacementBtn.classList.remove('hidden');
+                        this.instructionsEl.textContent = 'All ships placed! Confirm your fleet deployment.';
+                    }
+                }
+            }
+            this.endCustomDrag();
+        };
+        
+        document.addEventListener('mousemove', this._customDragMouseMove);
+        document.addEventListener('mouseup', this._customDragMouseUp);
     }
     
-    handleDragEnd(e) {
+    getBoardCellFromPoint(x, y) {
+        const el = document.elementFromPoint(x, y);
+        if (el && el.classList.contains('cell') && this.playerBoardEl.contains(el)) {
+            return el;
+        }
+        return null;
+    }
+    
+    endCustomDrag() {
         if (this.dragOriginalShip) {
             const shipName = this.dragOriginalShip.name;
             const wasReplaced = this.player.ships.some(s => s.name === shipName);
@@ -419,86 +468,17 @@ class BattleshipGame {
             this.dragGhost.remove();
             this.dragGhost = null;
         }
-        if (this._dragMoveHandler) {
-            document.removeEventListener('dragover', this._dragMoveHandler);
-            this._dragMoveHandler = null;
+        if (this._customDragMouseMove) {
+            document.removeEventListener('mousemove', this._customDragMouseMove);
+            this._customDragMouseMove = null;
+        }
+        if (this._customDragMouseUp) {
+            document.removeEventListener('mouseup', this._customDragMouseUp);
+            this._customDragMouseUp = null;
         }
         
         this.isDragging = false;
         this.draggedShipIndex = null;
-        e.target.classList.remove('dragging');
-        this.clearPreview();
-        this.renderShipSelection();
-        this.renderBoards();
-    }
-    
-    handleDragOver(e, row, col) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        
-        if (this.draggedShipIndex === null) return;
-        
-        this.clearPreview();
-        const ship = REBEL_SHIPS[this.draggedShipIndex];
-        const cells = this.getShipCells(row, col, ship.size, this.isHorizontal);
-        const isValid = this.canPlaceShip(this.player.board, row, col, ship.size, this.isHorizontal);
-        
-        cells.forEach(([r, c]) => {
-            if (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
-                const cellEl = this.playerBoardEl.querySelector(`[data-row="${r}"][data-col="${c}"]`);
-                if (cellEl) {
-                    cellEl.classList.add(isValid ? 'preview' : 'invalid');
-                }
-            }
-        });
-        
-        this.lastDragRow = row;
-        this.lastDragCol = col;
-    }
-    
-    handleDragLeave(e) {
-        // Only clear if leaving the board entirely
-        if (!e.relatedTarget || !this.playerBoardEl.contains(e.relatedTarget)) {
-            this.clearPreview();
-        }
-    }
-    
-    handleDrop(e, row, col) {
-        e.preventDefault();
-        
-        if (this.draggedShipIndex === null) return;
-        
-        const ship = REBEL_SHIPS[this.draggedShipIndex];
-        if (!this.canPlaceShip(this.player.board, row, col, ship.size, this.isHorizontal)) {
-            this.clearPreview();
-            return;
-        }
-        
-        const cells = this.getShipCells(row, col, ship.size, this.isHorizontal);
-        
-        cells.forEach(([r, c]) => {
-            this.player.board[r][c] = { ship: ship.name, hit: false };
-        });
-        
-        this.player.ships.push({
-            name: ship.name,
-            size: ship.size,
-            cells: cells,
-            hits: 0
-        });
-        
-        this.recordAction('place', 'player', { ship: ship.name, cells: cells });
-        
-        this.player.shipsPlaced++;
-        this.dragOriginalShip = null;
-        this.draggedShipIndex = null;
-        this.isDragging = false;
-        
-        if (this.player.shipsPlaced === REBEL_SHIPS.length) {
-            this.confirmPlacementBtn.classList.remove('hidden');
-            this.instructionsEl.textContent = 'All ships placed! Confirm your fleet deployment.';
-        }
-        
         this.clearPreview();
         this.renderShipSelection();
         this.renderBoards();
@@ -952,7 +932,8 @@ class BattleshipGame {
         this.gameActions = [];
         this.dragOriginalShip = null;
         this.dragGhost = null;
-        this._dragMoveHandler = null;
+        this._customDragMouseMove = null;
+        this._customDragMouseUp = null;
 
         this.gameOverEl.classList.add('hidden');
         this.shipSelectionEl.classList.remove('hidden');
