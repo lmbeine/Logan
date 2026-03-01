@@ -44,6 +44,10 @@ class BattleshipGame {
         this.replayIndex = 0;
         this.lastCompletedGame = null;
 
+        this.dragOriginalShip = null;
+        this.dragGhost = null;
+        this._dragMoveHandler = null;
+
         this.initializeDOM();
         this.setupEventListeners();
         this.renderShipSelection();
@@ -129,6 +133,10 @@ class BattleshipGame {
                     });
                 }
                 
+                if (this.dragGhost) {
+                    this.dragGhost.classList.toggle('vertical', !this.isHorizontal);
+                }
+                
                 this.updateRotationIndicator();
             }
         });
@@ -191,6 +199,15 @@ class BattleshipGame {
 
             shipVisual.addEventListener('dragstart', (e) => {
                 if (isPlaced) {
+                    const shipData = this.player.ships.find(s => s.name === ship.name);
+                    if (shipData) {
+                        this.dragOriginalShip = {
+                            name: shipData.name,
+                            size: shipData.size,
+                            cells: shipData.cells.map(c => [...c]),
+                            hits: shipData.hits
+                        };
+                    }
                     this.removeShipFromBoard(ship.name);
                 }
                 this.handleDragStart(e, index);
@@ -248,6 +265,41 @@ class BattleshipGame {
                     cell.addEventListener('dragover', (e) => this.handleDragOver(e, row, col));
                     cell.addEventListener('dragleave', (e) => this.handleDragLeave(e));
                     cell.addEventListener('drop', (e) => this.handleDrop(e, row, col));
+                    
+                    if (cellData.ship !== null) {
+                        cell.setAttribute('draggable', 'true');
+                        cell.classList.add('ship-draggable');
+                        const shipName = cellData.ship;
+                        cell.addEventListener('dragstart', (e) => {
+                            const shipIndex = REBEL_SHIPS.findIndex(s => s.name === shipName);
+                            const shipData = this.player.ships.find(s => s.name === shipName);
+                            if (shipData) {
+                                this.dragOriginalShip = {
+                                    name: shipData.name,
+                                    size: shipData.size,
+                                    cells: shipData.cells.map(c => [...c]),
+                                    hits: shipData.hits
+                                };
+                                shipData.cells.forEach(([r, c]) => {
+                                    this.player.board[r][c] = { ship: null, hit: false };
+                                });
+                                this.player.ships = this.player.ships.filter(s => s.name !== shipName);
+                                this.player.shipsPlaced--;
+                                if (this.player.shipsPlaced < REBEL_SHIPS.length) {
+                                    this.confirmPlacementBtn.classList.add('hidden');
+                                }
+                                this.dragOriginalShip.cells.forEach(([r, c]) => {
+                                    const cellEl = this.playerBoardEl.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+                                    if (cellEl) {
+                                        cellEl.classList.remove('ship', 'ship-draggable');
+                                        cellEl.removeAttribute('draggable');
+                                    }
+                                });
+                            }
+                            this.handleDragStart(e, shipIndex);
+                        });
+                        cell.addEventListener('dragend', (e) => this.handleDragEnd(e));
+                    }
                 }
                 
                 if (this.phase === 'battle' && this.showHeatmap && !cellData.hit) {
@@ -318,24 +370,66 @@ class BattleshipGame {
         
         e.target.classList.add('dragging');
         
-        const dragImage = e.target.cloneNode(true);
-        dragImage.style.position = 'absolute';
-        dragImage.style.top = '-1000px';
-        dragImage.classList.add('drag-ghost');
-        if (!this.isHorizontal) {
-            dragImage.classList.add('vertical');
-        }
-        document.body.appendChild(dragImage);
-        e.dataTransfer.setDragImage(dragImage, 15, 15);
+        const transparentImg = new Image();
+        transparentImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        e.dataTransfer.setDragImage(transparentImg, 0, 0);
         
-        setTimeout(() => dragImage.remove(), 0);
+        this.dragGhost = document.createElement('div');
+        this.dragGhost.className = 'drag-ghost-custom';
+        if (!this.isHorizontal) {
+            this.dragGhost.classList.add('vertical');
+        }
+        for (let i = 0; i < ship.size; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'ship-cell';
+            this.dragGhost.appendChild(cell);
+        }
+        this.dragGhost.style.left = (e.clientX + 10) + 'px';
+        this.dragGhost.style.top = (e.clientY + 10) + 'px';
+        document.body.appendChild(this.dragGhost);
+        
+        this._dragMoveHandler = (ev) => {
+            if (this.dragGhost) {
+                this.dragGhost.style.left = (ev.clientX + 10) + 'px';
+                this.dragGhost.style.top = (ev.clientY + 10) + 'px';
+            }
+        };
+        document.addEventListener('dragover', this._dragMoveHandler);
     }
     
     handleDragEnd(e) {
+        if (this.dragOriginalShip) {
+            const shipName = this.dragOriginalShip.name;
+            const wasReplaced = this.player.ships.some(s => s.name === shipName);
+            if (!wasReplaced) {
+                this.dragOriginalShip.cells.forEach(([r, c]) => {
+                    this.player.board[r][c] = { ship: shipName, hit: false };
+                });
+                this.player.ships.push(this.dragOriginalShip);
+                this.player.shipsPlaced++;
+                if (this.player.shipsPlaced === REBEL_SHIPS.length) {
+                    this.confirmPlacementBtn.classList.remove('hidden');
+                    this.instructionsEl.textContent = 'All ships placed! Confirm your fleet deployment.';
+                }
+            }
+            this.dragOriginalShip = null;
+        }
+        
+        if (this.dragGhost) {
+            this.dragGhost.remove();
+            this.dragGhost = null;
+        }
+        if (this._dragMoveHandler) {
+            document.removeEventListener('dragover', this._dragMoveHandler);
+            this._dragMoveHandler = null;
+        }
+        
         this.isDragging = false;
         this.draggedShipIndex = null;
         e.target.classList.remove('dragging');
         this.clearPreview();
+        this.renderShipSelection();
+        this.renderBoards();
     }
     
     handleDragOver(e, row, col) {
@@ -396,6 +490,7 @@ class BattleshipGame {
         this.recordAction('place', 'player', { ship: ship.name, cells: cells });
         
         this.player.shipsPlaced++;
+        this.dragOriginalShip = null;
         this.draggedShipIndex = null;
         this.isDragging = false;
         
@@ -855,6 +950,9 @@ class BattleshipGame {
         this.playerShots = 0;
         this.playerHits = 0;
         this.gameActions = [];
+        this.dragOriginalShip = null;
+        this.dragGhost = null;
+        this._dragMoveHandler = null;
 
         this.gameOverEl.classList.add('hidden');
         this.shipSelectionEl.classList.remove('hidden');
