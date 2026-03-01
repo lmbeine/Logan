@@ -56,7 +56,7 @@ class BattleshipGame {
 
     createEmptyBoard() {
         return Array(BOARD_SIZE).fill(null).map(() => 
-            Array(BOARD_SIZE).fill({ ship: null, hit: false })
+            Array(BOARD_SIZE).fill(null).map(() => ({ ship: null, hit: false }))
         );
     }
 
@@ -496,24 +496,25 @@ class BattleshipGame {
         
         const isHit = cellData.ship !== null;
         const shipName = isHit ? cellData.ship : null;
-        const isSunk = isHit && this.isShipSunk(this.ai, shipName);
-        
-        this.recordAction('attack', 'player', { 
-            row, col, 
-            hit: isHit, 
-            ship: shipName,
-            sunk: isSunk
-        });
 
         if (cellData.ship !== null) {
             const ship = this.ai.ships.find(s => s.name === cellData.ship);
             ship.hits++;
             this.playerHits++;
             
+            const isSunk = this.isShipSunk(this.ai, ship.name);
+            
+            this.recordAction('attack', 'player', { 
+                row, col, 
+                hit: isHit, 
+                ship: shipName,
+                sunk: isSunk
+            });
+            
             this.renderBoards();
             this.triggerExplosion(this.enemyBoardEl, row, col);
 
-            if (this.isShipSunk(this.ai, ship.name)) {
+            if (isSunk) {
                 this.instructionsEl.textContent = `You destroyed their ${ship.name}!`;
                 this.rebelCaptures.push(ship.name);
                 this.renderCaptures();
@@ -530,6 +531,12 @@ class BattleshipGame {
                 return;
             }
         } else {
+            this.recordAction('attack', 'player', { 
+                row, col, 
+                hit: isHit, 
+                ship: shipName,
+                sunk: false
+            });
             this.instructionsEl.textContent = 'Miss!';
             this.renderBoards();
         }
@@ -552,24 +559,24 @@ class BattleshipGame {
         
         const isHit = cellData.ship !== null;
         const shipName = isHit ? cellData.ship : null;
-        const isSunk = isHit && this.isShipSunk(this.player, shipName);
-        
-        if (isSunk) {
-            const ship = this.player.ships.find(s => s.name === shipName);
-            const idx = this.aiRemainingShips.indexOf(ship.size);
-            if (idx > -1) this.aiRemainingShips.splice(idx, 1);
-        }
-        
-        this.recordAction('attack', 'ai', { 
-            row, col, 
-            hit: isHit, 
-            ship: shipName,
-            sunk: isSunk
-        });
 
         if (cellData.ship !== null) {
             const ship = this.player.ships.find(s => s.name === cellData.ship);
             ship.hits++;
+            
+            const isSunk = this.isShipSunk(this.player, ship.name);
+            
+            if (isSunk) {
+                const idx = this.aiRemainingShips.indexOf(ship.size);
+                if (idx > -1) this.aiRemainingShips.splice(idx, 1);
+            }
+            
+            this.recordAction('attack', 'ai', { 
+                row, col, 
+                hit: isHit, 
+                ship: shipName,
+                sunk: isSunk
+            });
             
             this.renderBoards();
             this.triggerExplosion(this.playerBoardEl, row, col);
@@ -592,6 +599,12 @@ class BattleshipGame {
                 return;
             }
         } else {
+            this.recordAction('attack', 'ai', { 
+                row, col, 
+                hit: isHit, 
+                ship: shipName,
+                sunk: false
+            });
             this.instructionsEl.textContent = 'The Empire missed!';
         }
 
@@ -843,6 +856,7 @@ class BattleshipGame {
         this.gameActions = [];
 
         this.gameOverEl.classList.add('hidden');
+        this.shipSelectionEl.classList.remove('hidden');
         this.renderCaptures();
         
         this.phaseIndicatorEl.textContent = 'Setup Phase';
@@ -955,9 +969,9 @@ class BattleshipGame {
                 aVal = aVal === 'Win' ? 1 : 0;
                 bVal = bVal === 'Win' ? 1 : 0;
             } else if (this.currentSortColumn === 'difficulty') {
-                const order = { 'Easy': 1, 'Moderate': 2, 'Hard': 3 };
-                aVal = order[aVal];
-                bVal = order[bVal];
+                const order = { 'Easy': 1, 'Moderate': 2, 'Hard': 3, 'Heatmap AI': 4 };
+                aVal = order[aVal] || 0;
+                bVal = order[bVal] || 0;
             }
             
             if (this.currentSortDirection === 'asc') {
@@ -972,7 +986,7 @@ class BattleshipGame {
             row.innerHTML = `
                 <td>${game.game}</td>
                 <td class="${game.result.toLowerCase()}">${game.result}</td>
-                <td class="${game.difficulty.toLowerCase()}">${game.difficulty}</td>
+                <td class="${game.difficulty.toLowerCase().replace(/\s+/g, '-')}">${game.difficulty}</td>
                 <td>${game.shots}</td>
                 <td>${game.hits}</td>
                 <td>${game.accuracy}%</td>
