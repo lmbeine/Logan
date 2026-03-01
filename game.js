@@ -518,6 +518,9 @@ class BattleshipGame {
     }
 
     updateRotationIndicator() {
+        if (this.player.shipsPlaced === REBEL_SHIPS.length) {
+            return;
+        }
         const indicator = this.isHorizontal ? '↔ Horizontal' : '↕ Vertical';
         this.instructionsEl.textContent = `Drag ships to your grid. Press R to rotate. [${indicator}]`;
     }
@@ -594,6 +597,8 @@ class BattleshipGame {
                 this.instructionsEl.textContent = `You destroyed their ${ship.name}!`;
                 this.rebelCaptures.push(ship.name);
                 this.renderCaptures();
+                this.isPlayerTurn = false;
+                this.currentPlayerEl.textContent = "Empire's Turn";
                 setTimeout(() => {
                     this.showShipDestroyedModal('rebel', ship.name);
                 }, 600);
@@ -1157,7 +1162,11 @@ class BattleshipGame {
         const enemyBoard = this.createEmptyBoard();
         
         const placeActions = this.replayActions.filter(a => a.type === 'place');
+        const lastPlaceActions = new Map();
         placeActions.forEach(action => {
+            lastPlaceActions.set(action.actor + ':' + action.data.ship, action);
+        });
+        lastPlaceActions.forEach(action => {
             const board = action.actor === 'player' ? playerBoard : enemyBoard;
             action.data.cells.forEach(([r, c]) => {
                 board[r][c] = { ship: action.data.ship, hit: false };
